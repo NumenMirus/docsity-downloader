@@ -1,0 +1,2 @@
+aggiungere di scaricare tutto sia blurred che non
+fix image_finder.py
