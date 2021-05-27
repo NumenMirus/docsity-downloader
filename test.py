@@ -3,13 +3,14 @@ url = "https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-ingles
 from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
+from parsers import blurred_parser
 
 driver = webdriver.Chrome("/home/numen/Desktop/progetti/docsity-downloader/chromedriver")
 
 driver.get(url)
 print(driver.title)
 
-time.sleep(5)
+time.sleep(2)
 
 cookie = driver.find_element_by_id("CybotCookiebotDialogBodyButtonAccept")
 cookie.click()
@@ -23,7 +24,7 @@ time.sleep(2)
 print("scrolling...")
 html = driver.find_element_by_tag_name('html')
 html.click()
-for i in range(30):
+for i in range(50):
     html.send_keys(Keys.PAGE_DOWN)
     time.sleep(0.5)
 
@@ -46,15 +47,12 @@ free = []
 for i in links:
     for j in i:
         temp = j.get_attribute('class')
-
+    
         if temp == "dsy-page__content dsy-page__content--blur_be":
             blurred.append(i)
             break
         elif temp == "dsy-page__content dsy-page__content--free":
             free.append(i)
-            break
-        elif temp == "dsy-overlay-glass":
-            glass.append(i)
             break
         elif temp == "dsy-page__content dsy-page__content--blur_fe":
             covered.append(i)
@@ -62,7 +60,13 @@ for i in links:
         else:
             pass
 
-print("blurred: %d\ncovered: %d\nglass: %d\nfree: %d" %(len(blurred), len(covered), len(glass), len(free)))
+print("blurred: %d\tcovered: %d\tglass: %d\tfree: %d" %(len(blurred), len(covered), len(glass), len(free)))
+
+#------------------------------------------------------------------------------
+#----------------------------ANALIZING RESULTS---------------------------------
+#------------------------------------------------------------------------------
+
+blurred_parser(blurred)
 
 #print(blurred)
 #print(covered)
