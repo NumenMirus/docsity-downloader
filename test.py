@@ -66,7 +66,7 @@ print("blurred: %d\tcovered: %d\tglass: %d\tfree: %d" %(len(blurred), len(covere
 #----------------------------ANALIZING RESULTS---------------------------------
 #------------------------------------------------------------------------------
 
-blurred_parser(blurred)
+print(blurred_parser(blurred))
 
 #print(blurred)
 #print(covered)
