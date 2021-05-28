@@ -5,7 +5,7 @@ from tqdm import tqdm
 import requests
 from os import path
 
-def get_unblurred_url(url):
+def _get_unblurred_url(url):
     t = str(type(url))
     if t == "<class 'list'>":
         res = []
@@ -54,6 +54,6 @@ def blurred_parser(blurred):
                         else:
                             pass
 
-    temp = get_unblurred_url(imgs)
+    temp = _get_unblurred_url(imgs)
     res = set(temp)
     return res

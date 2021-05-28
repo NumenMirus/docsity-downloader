@@ -1,7 +1,7 @@
 from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
-from parsers import blurred_parser, download_files, get_unblurred_url
+from parsers import blurred_parser, download_files
 from os import path
 import requests
 from tqdm import tqdm
@@ -26,13 +26,18 @@ print("\nBenvenuto! Sei qui per aggirare la censura eh?")
 n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla pagina\n2) Scaricare una sola immagine sfocata\n\n"))
 
 if n == 1:
-    url = "https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/" #input("\nInserisci il link della pagina: ")
-    path = "/home/numen/Desktop/New/" #input("Inserisci il percorso: ")
+    url = input("\nInserisci il link della pagina: ") #"https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/"
+    path = input("Inserisci il percorso: ") #"/home/numen/Desktop/New/" 
+    
+    if 'en' in url:
+            url = url.replace('en', 'it')
+            print(url)
 
 elif n == 2:
     url = input("\nInserisci il link dell'immagine sfocata: ")
     path = input("Inserisci il percorso: ")
 
+    
 #------------------------------------------------------------------------------
 #----------------------------FETCHING IMAGES-----------------------------------
 #------------------------------------------------------------------------------
