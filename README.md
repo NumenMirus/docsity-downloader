@@ -15,6 +15,8 @@ Download Chrome and the matching chromedriver from
 
 https://sites.google.com/chromium.org/driver/
 
+And place it inside the same folder as this tool
+
 ## Step 3
 
 Run main.py with
