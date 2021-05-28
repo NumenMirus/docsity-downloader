@@ -1,9 +1,10 @@
 from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
-from parsers import blurred_parser
+from parsers import blurred_parser, download_files, get_unblurred_url
 from os import path
 import requests
+from tqdm import tqdm
 
 #url = "https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/"
 
@@ -11,15 +12,22 @@ import requests
 #-------------------------------GUI--------------------------------------------
 #------------------------------------------------------------------------------
 
-print("Docsity Downloader")
+print("╔═══╗        ╔═══╗   ╔╗            ╔╗              ╔╗            ╔╗       ")
+print("╚╗╔╗║        ║╔═╗║  ╔╝╚╗           ║║              ║║            ║║       ")
+print(" ║║║║╔══╗╔══╗║╚══╗╔╗╚╗╔╝╔╗ ╔╗    ╔═╝║╔══╗╔╗╔╗╔╗╔═╗ ║║ ╔══╗╔══╗ ╔═╝║╔══╗╔═╗")
+print(" ║║║║║╔╗║║╔═╝╚══╗║╠╣ ║║ ║║ ║║    ║╔╗║║╔╗║║╚╝╚╝║║╔╗╗║║ ║╔╗║╚ ╗║ ║╔╗║║╔╗║║╔╝")
+print("╔╝╚╝║║╚╝║║╚═╗║╚═╝║║║ ║╚╗║╚═╝║    ║╚╝║║╚╝║╚╗╔╗╔╝║║║║║╚╗║╚╝║║╚╝╚╗║╚╝║║║═╣║║ ")
+print("╚═══╝╚══╝╚══╝╚═══╝╚╝ ╚═╝╚═╗╔╝    ╚══╝╚══╝ ╚╝╚╝ ╚╝╚╝╚═╝╚══╝╚═══╝╚══╝╚══╝╚╝ ")
+print("                        ╔═╝║                                              ")
+print("                        ╚══╝                                              ")
 
 print("\nBenvenuto! Sei qui per aggirare la censura eh?")
 
 n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla pagina\n2) Scaricare una sola immagine sfocata\n\n"))
 
 if n == 1:
-    url = input("\nInserisci il link della pagina: ")
-    path = input("Inserisci il percorso: ")
+    url = "https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/" #input("\nInserisci il link della pagina: ")
+    path = "/home/numen/Desktop/New/" #input("Inserisci il percorso: ")
 
 elif n == 2:
     url = input("\nInserisci il link dell'immagine sfocata: ")
@@ -48,27 +56,27 @@ time.sleep(2)
 print("scrolling...")
 html = driver.find_element_by_tag_name('html')
 html.click()
-for i in range(50):
+for i in tqdm(range(50)):
     html.send_keys(Keys.PAGE_DOWN)
     time.sleep(0.5)
 
 
 time.sleep(2)
 
-print("parsing...")
+print("\nparsing...")
 wrappers = driver.find_elements_by_class_name("dsy-page__wrapper")
 
 links = []
 for i in wrappers:
     links.append(i.find_elements_by_tag_name("div"))
 
-print("links: %d" %len(links))
+#print("links: %d" %len(links))
 
 blurred = []
 covered = []
 glass = []
 free = []
-for i in links:
+for i in tqdm(links):
     for j in i:
         temp = j.get_attribute('class')
     
@@ -84,7 +92,7 @@ for i in links:
         else:
             pass
 
-print("blurred: %d\tcovered: %d\tglass: %d\tfree: %d\n" %(len(blurred), len(covered), len(glass), len(free)))
+print("\nblurred: %d\tcovered: %d\tglass: %d\tfree: %d\n" %(len(blurred), len(covered), len(glass), len(free)))
 
 #------------------------------------------------------------------------------
 #----------------------------ANALIZING RESULTS---------------------------------
@@ -92,8 +100,7 @@ print("blurred: %d\tcovered: %d\tglass: %d\tfree: %d\n" %(len(blurred), len(cove
 
 result = blurred_parser(blurred)
 
-for i in result:
-    print(i)
+download_files(result, path)
 
 #print(blurred)
 #print(covered)

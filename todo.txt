@@ -1,2 +1,1 @@
-aggiungere di scaricare tutto sia blurred che non
-fix image_finder.py
+ritornare la lista di blurred senza doppi senza trasformarla in set
