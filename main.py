@@ -1,23 +1,15 @@
+from selenium import webdriver
+import time
+from selenium.webdriver.common.keys import Keys
+from parsers import blurred_parser
 from os import path
 import requests
-import image_finder as im
 
-def download_files(url, path):
-    local_filename = url.split('/')[-1]
-    with requests.get(url, stream=True) as r:
-        #print("Scaricando...")
-        with open(path + local_filename, 'wb') as f:
-            #print("Scrivendo i dati nel file...")
-            for chunk in r.iter_content(chunk_size=2024):
-                f.write(chunk)
-    f.close()
-    #print("Completato!")
-    print("File salvato come: "+local_filename)
+#url = "https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/"
 
-def get_unblurred_url(url):
-    temp = url.replace("documents_pages_blur", "documents_pages")
-    return temp
-
+#------------------------------------------------------------------------------
+#-------------------------------GUI--------------------------------------------
+#------------------------------------------------------------------------------
 
 print("Benvenuto! Sei qui per aggirare la censura eh?")
 
@@ -26,14 +18,84 @@ n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla p
 if n == 1:
     url = input("\nInserisci il link della pagina: ")
     path = input("Inserisci il percorso: ")
-    images = im.find_images(url)
-    blurred = im.image_parser(images)
-
-    print(images)
-    print(blurred)
 
 elif n == 2:
     url = input("\nInserisci il link dell'immagine sfocata: ")
     path = input("Inserisci il percorso: ")
 
-    download_files(get_unblurred_url(url), path)
+#------------------------------------------------------------------------------
+#----------------------------FETCHING IMAGES-----------------------------------
+#------------------------------------------------------------------------------
+
+driver = webdriver.Chrome("/home/numen/Desktop/progetti/docsity-downloader/chromedriver")
+
+driver.get(url)
+print(driver.title)
+
+time.sleep(2)
+
+cookie = driver.find_element_by_id("CybotCookiebotDialogBodyButtonAccept")
+cookie.click()
+time.sleep(1)
+
+button = driver.find_element_by_link_text("VEDI L'ANTEPRIMA")
+button.click()
+
+time.sleep(2)
+
+print("scrolling...")
+html = driver.find_element_by_tag_name('html')
+html.click()
+for i in range(50):
+    html.send_keys(Keys.PAGE_DOWN)
+    time.sleep(0.5)
+
+
+time.sleep(2)
+
+print("parsing...")
+wrappers = driver.find_elements_by_class_name("dsy-page__wrapper")
+
+links = []
+for i in wrappers:
+    links.append(i.find_elements_by_tag_name("div"))
+
+print("links: %d" %len(links))
+
+blurred = []
+covered = []
+glass = []
+free = []
+for i in links:
+    for j in i:
+        temp = j.get_attribute('class')
+    
+        if temp == "dsy-page__content dsy-page__content--blur_be":
+            blurred.append(i)
+            break
+        elif temp == "dsy-page__content dsy-page__content--free":
+            free.append(i)
+            break
+        elif temp == "dsy-page__content dsy-page__content--blur_fe":
+            covered.append(i)
+            break
+        else:
+            pass
+
+print("blurred: %d\tcovered: %d\tglass: %d\tfree: %d\n" %(len(blurred), len(covered), len(glass), len(free)))
+
+#------------------------------------------------------------------------------
+#----------------------------ANALIZING RESULTS---------------------------------
+#------------------------------------------------------------------------------
+
+result = blurred_parser(blurred)
+
+for i in result:
+    print(i)
+
+#print(blurred)
+#print(covered)
+#print(glass)
+#print(free)
+
+driver.quit()
