@@ -11,9 +11,11 @@ import requests
 #-------------------------------GUI--------------------------------------------
 #------------------------------------------------------------------------------
 
-print("Benvenuto! Sei qui per aggirare la censura eh?")
+print("Docsity Downloader")
 
-n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla pagina\n2) Scaricare una sola immagine sfocata\n"))
+print("\nBenvenuto! Sei qui per aggirare la censura eh?")
+
+n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla pagina\n2) Scaricare una sola immagine sfocata\n\n"))
 
 if n == 1:
     url = input("\nInserisci il link della pagina: ")
