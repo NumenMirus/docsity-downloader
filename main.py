@@ -28,10 +28,9 @@ n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla p
 if n == 1:
     url = input("\nInserisci il link della pagina: ") #"https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/"
     path = input("Inserisci il percorso: ") #"/home/numen/Desktop/New/" 
-    
+
     if 'en' in url:
-            url = url.replace('en', 'it')
-            print(url)
+            url = url.replace('/en/', '/it/')
 
 elif n == 2:
     url = input("\nInserisci il link dell'immagine sfocata: ")
@@ -42,25 +41,34 @@ elif n == 2:
 #----------------------------FETCHING IMAGES-----------------------------------
 #------------------------------------------------------------------------------
 
+#sets the driver to chrome
 driver = webdriver.Chrome("/home/numen/Desktop/progetti/docsity-downloader/chromedriver")
 
+#opens website from url
 driver.get(url)
 print(driver.title)
 
 time.sleep(2)
 
+#find and accepts cookies
 cookie = driver.find_element_by_id("CybotCookiebotDialogBodyButtonAccept")
 cookie.click()
 time.sleep(1)
 
+#open the document preview
 button = driver.find_element_by_link_text("VEDI L'ANTEPRIMA")
 button.click()
 
 time.sleep(2)
 
+#scroll the page to load all the images
 print("scrolling...")
 html = driver.find_element_by_tag_name('html')
 html.click()
+
+#find how much to scroll based on number of pages
+#pag = driver.find_element_by_class_name("dsy-heading dsy-heading--muted dsy-heading--uppercase dsy-heading--center dsy-heading--tiny")
+#num = pag.text
 for i in tqdm(range(50)):
     html.send_keys(Keys.PAGE_DOWN)
     time.sleep(0.5)
@@ -68,23 +76,28 @@ for i in tqdm(range(50)):
 
 time.sleep(2)
 
+#extract all page wrappers
 print("\nparsing...")
 wrappers = driver.find_elements_by_class_name("dsy-page__wrapper")
 
-links = []
+#extract all <div> from page wrapper
+divs = []
 for i in wrappers:
-    links.append(i.find_elements_by_tag_name("div"))
+    divs.append(i.find_elements_by_tag_name("div"))
 
-#print("links: %d" %len(links))
+#print("links: %d" %len(divs))
 
+#filter all categories of censorship
 blurred = []
 covered = []
-glass = []
 free = []
-for i in tqdm(links):
+#divis is a list of lists, and tqdm is the progressbar
+for i in tqdm(divs):
+    #j becomes every element of i (sublist of divs[])
     for j in i:
         temp = j.get_attribute('class')
     
+        #filtering based on the class name
         if temp == "dsy-page__content dsy-page__content--blur_be":
             blurred.append(i)
             break
@@ -97,7 +110,8 @@ for i in tqdm(links):
         else:
             pass
 
-print("\nblurred: %d\tcovered: %d\tglass: %d\tfree: %d\n" %(len(blurred), len(covered), len(glass), len(free)))
+#print useful informaton
+print("\nblurred: %d\tcovered: %d\tfree: %d\n" %(len(blurred), len(covered), len(free)))
 
 #------------------------------------------------------------------------------
 #----------------------------ANALIZING RESULTS---------------------------------

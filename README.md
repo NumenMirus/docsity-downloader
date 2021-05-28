@@ -7,7 +7,7 @@ Built in Python 3.8.5
 
 Install Requirements.txt with
 
-`pip3 install -r Requirements.txt`
+`pip3 install -r requirements.txt`
 
 ## Step 2
 
