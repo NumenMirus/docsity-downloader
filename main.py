@@ -1,12 +1,12 @@
 from selenium import webdriver
 import time
 from selenium.webdriver.common.keys import Keys
-from parsers import blurred_parser, download_files
+from parsers import blurred_parser, covered_parser, download_files, free_parser
 from os import path
 import requests
 from tqdm import tqdm
 
-#url = "https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/"
+#url = "https://www.docsity.com/en/analisi-la-luppa-di-giovanni-verga/2690000/"
 
 #------------------------------------------------------------------------------
 #-------------------------------GUI--------------------------------------------
@@ -26,8 +26,8 @@ print("\nBenvenuto! Sei qui per aggirare la censura eh?")
 n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla pagina\n2) Scaricare una sola immagine sfocata\n\n"))
 
 if n == 1:
-    url = input("\nInserisci il link della pagina: ") #"https://www.docsity.com/it/letteratura-inglese-la-fiaba-letteraria-inglese/2642957/"
-    path = input("Inserisci il percorso: ") #"/home/numen/Desktop/New/" 
+    url = input("\nInserisci il link della pagina: ") 
+    path = input("Inserisci il percorso: ") 
 
     if 'en' in url:
             url = url.replace('/en/', '/it/')
@@ -63,16 +63,18 @@ time.sleep(2)
 
 #scroll the page to load all the images
 print("scrolling...")
-html = driver.find_element_by_tag_name('html')
-html.click()
+# html = driver.find_element_by_tag_name('html')
+# html.click()
 
 #find how much to scroll based on number of pages
 #pag = driver.find_element_by_class_name("dsy-heading dsy-heading--muted dsy-heading--uppercase dsy-heading--center dsy-heading--tiny")
 #num = pag.text
-for i in tqdm(range(50)):
-    html.send_keys(Keys.PAGE_DOWN)
+# for i in tqdm(range(20)):
+#     html.send_keys(Keys.PAGE_DOWN)
+#     time.sleep(0.5)
+for i in range(5):
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(0.5)
-
 
 time.sleep(2)
 
@@ -111,15 +113,22 @@ for i in tqdm(divs):
             pass
 
 #print useful informaton
-print("\nblurred: %d\tcovered: %d\tfree: %d\n" %(len(blurred), len(covered), len(free)))
+print("\nTOTAL: %d\tblurred: %d\tcovered: %d\tfree: %d" %(len(divs), len(blurred), len(covered), len(free)))
 
 #------------------------------------------------------------------------------
 #----------------------------ANALIZING RESULTS---------------------------------
 #------------------------------------------------------------------------------
 
 result = blurred_parser(blurred)
-
 download_files(result, path)
+covered_parser(covered, path)
+free_parser(free, path)
+
+#------------------------------------------------------------------------------
+#--------------------------DOWNLOADING RESULTS---------------------------------
+#------------------------------------------------------------------------------
+
+#download_files(result, path)
 
 #print(blurred)
 #print(covered)

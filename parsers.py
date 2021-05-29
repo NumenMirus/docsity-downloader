@@ -2,6 +2,10 @@ from urllib3 import request
 from tqdm import tqdm
 import requests
 from os import path
+import pypandoc
+import time
+
+nome_file = 0
 
 #get the link to the unblurred image
 def _get_unblurred_url(url):
@@ -17,35 +21,20 @@ def _get_unblurred_url(url):
     return res
 
 #downloads the image to the specified path
-def download_files(url, path):
+def download_files(urls, path):
+    global nome_file
+    for url in urls:
         #filename is equal to the image name in the link
-        local_filename = url.split('/')[-1]
         with requests.get(url, stream=True) as r:
             #print("Scaricando...")
-            with open(path + local_filename, 'wb') as f:
+            with open(path + (str(nome_file)+url[-1:-5]), 'wb') as f:
                 #print("Scrivendo i dati nel file...")
                 for chunk in r.iter_content(chunk_size=2024):
                     f.write(chunk)
         f.close()
+        nome_file += 1
         #print("Completato!")
-        #print("File salvato come: "+local_filename)
-
-#extract the link to the blurred images, return alist of unblurred images links
-def blurred_parser(blurred):
-    imgs = []
-    print("saving files...")
-    for i in tqdm(blurred):
-        #filename is equal to the image name in the link
-        local_filename = i.split('/')[-1]
-        with requests.get(i, stream=True) as r:
-            #print("Scaricando...")
-            with open(path + local_filename, 'wb') as f:
-                #print("Scrivendo i dati nel file...")
-                for chunk in r.iter_content(chunk_size=2024):
-                    f.write(chunk)
-        f.close()
-        #print("Completato!")
-        #print("File salvato come: "+local_filename)
+        #print("File salvato come: "+(str(nome_file)+url[-1:-5]))
 
 #extract the link to the blurred images, return alist of unblurred images links
 def blurred_parser(blurred):
@@ -73,11 +62,49 @@ def blurred_parser(blurred):
                         break
                     else:
                         pass
+        time.sleep(0.5)
 
     temp = _get_unblurred_url(imgs)
-    print(temp)
-    #res = set(temp) #used to transform th list in a set to remove duplicates, now solved
+    #res = set(temp) #used to transform the list in a set to remove duplicates, now solved
     return temp
 
-def covered_parser(covered):
-    pass
+def covered_parser(covered, path):
+    global nome_file
+    temp = []
+    new = []
+    for i in covered:
+        for j in i:
+            #gets all the starting point of .docx file from html
+            if j.get_attribute("class") == "pf w0 h0":
+                new.append(j)
+                break
+    
+    print("grabbing covered PDFs..")
+    n = 0
+    for i in tqdm(new):
+        #convert html to .docx and save it
+        s = i.get_attribute('innerHTML')
+        full_path = path + str(nome_file) + '.docx'
+        docx = pypandoc.convert(source=s, format='html', to='docx', outputfile=full_path, extra_args=['-RTS'])
+        nome_file += 1
+        time.sleep(0.5)
+    
+def free_parser(free, path):
+    global nome_file
+    temp = []
+    new = []
+    for i in free:
+        for j in i:
+            #gets all the starting point of .docx file from html
+            if j.get_attribute("class") == "pf w0 h0":
+                new.append(j)
+                break
+    
+    print("grabbing free PDFs..")
+    for i in tqdm(new):
+        #convert html to .docx and save it
+        s = i.get_attribute('innerHTML')
+        full_path = path + str(nome_file) + '.docx'
+        docx = pypandoc.convert(source=s, format='html', to='docx', outputfile=full_path, extra_args=['-RTS'])
+        nome_file += 1
+        time.sleep(0.5)

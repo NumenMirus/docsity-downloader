@@ -1,1 +1,4 @@
-ritornare la lista di blurred senza doppi senza trasformarla in set
+fare in modo che le pagine in output siano in ordine e numerate
+migliorare la qualita dei pdf...
+scorrimento intelligente della pagina
+possibilità di aggiungere il nome per l'utente
