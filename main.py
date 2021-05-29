@@ -28,7 +28,7 @@ n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla p
 if n == 1:
     url = input("\nInserisci il link della pagina: ") 
     path = input("Inserisci il percorso: ")
-    pagine = imput("Quante pagine ha il documento?")
+    pagine = input("Quante pagine ha il documento?")
 
     if 'en' in url:
             url = url.replace('/en/', '/it/')
