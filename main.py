@@ -70,7 +70,7 @@ html.click()
 #find how much to scroll based on number of pages
 #pag = driver.find_element_by_class_name("dsy-heading dsy-heading--muted dsy-heading--uppercase dsy-heading--center dsy-heading--tiny")
 #num = pag.text
-for i in tqdm(range(int(pagine*2.3))):
+for i in tqdm(range(int(pagine*2))):
     html.send_keys(Keys.PAGE_DOWN)
     time.sleep(0.5)
 
