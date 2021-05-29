@@ -79,7 +79,7 @@ def covered_parser(covered, path):
                 new.append(j)
                 break
     
-    print("grabbing covered PDFs..")
+    print("\ngrabbing covered PDFs..")
     n = 0
     for i in tqdm(new):
         #convert html to .docx and save it
@@ -100,7 +100,7 @@ def free_parser(free, path):
                 new.append(j)
                 break
     
-    print("grabbing free PDFs..")
+    print("\ngrabbing free PDFs..")
     for i in tqdm(new):
         #convert html to .docx and save it
         s = i.get_attribute('innerHTML')
