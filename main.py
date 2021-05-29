@@ -28,7 +28,7 @@ n = int(input("\nCosa vuoi fare?\n1) Scaricare tutte le immagini sfocate dalla p
 if n == 1:
     url = input("\nInserisci il link della pagina: ") 
     path = input("Inserisci il percorso: ")
-    pagine = input("Quante pagine ha il documento?")
+    pagine = int(input("Quante pagine ha il documento?  "))
 
     if 'en' in url:
             url = url.replace('/en/', '/it/')
@@ -70,7 +70,7 @@ html.click()
 #find how much to scroll based on number of pages
 #pag = driver.find_element_by_class_name("dsy-heading dsy-heading--muted dsy-heading--uppercase dsy-heading--center dsy-heading--tiny")
 #num = pag.text
-for i in tqdm(range(int(pagine*2))):
+for i in tqdm(range(pagine*2)):
     html.send_keys(Keys.PAGE_DOWN)
     time.sleep(0.5)
 
