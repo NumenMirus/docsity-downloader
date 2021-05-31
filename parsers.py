@@ -33,7 +33,7 @@ def download_files(urls, path):
         #filename is equal to the image name in the link
         with requests.get(url, stream=True) as r:
             #print("Scaricando...")
-            with open(path + (str(nome_file)+url[-1:-5]), 'wb') as f:
+            with open(path + ((str(nome_file)+'.png')+url[-1:-5]), 'wb') as f:
                 #print("Scrivendo i dati nel file...")
                 for chunk in r.iter_content(chunk_size=2024):
                     f.write(chunk)
@@ -87,13 +87,17 @@ def covered_parser(covered, path):
     
     print("\ngrabbing covered PDFs..")
     n = 0
-    for i in tqdm(new):
+    # for i in tqdm(new):
         #convert html to .docx and save it
-        s = i.get_attribute('innerHTML')
-        full_path = path + str(nome_file) + '.docx'
-        docx = pypandoc.convert(source=s, format='html', to='docx', outputfile=full_path, extra_args=['-RTS'])
-        nome_file += 1
-        time.sleep(0.5)
+        # s = i.get_attribute('innerHTML')
+        # full_path = path + str(nome_file) + '.docx'
+        # docx = pypandoc.convert(source=s, format='html', to='docx', outputfile=full_path, extra_args=['-RTS'])
+        # nome_file += 1
+        # time.sleep(0.5)
+
+    for i in tqdm(new):
+        PDF_parser(i, path)
+
     
 def free_parser(free, path):
     global nome_file
@@ -114,8 +118,8 @@ def free_parser(free, path):
     #     docx = pypandoc.convert(source=s, format='html', to='docx', outputfile=full_path, extra_args=['-RTS'])
     #     nome_file += 1
     #     time.sleep(0.5)
-    for i in new:
-        PDF_parser(i)
+    for i in tqdm(new):
+        PDF_parser(i, path)
 
 def add_title(doc, text):
     doc.append(Spacer(1, 1.5))
@@ -130,7 +134,7 @@ def add_paragraph(doc, text):
 
     return doc
 
-def PDF_parser(element):
+def PDF_parser(element, path):
     global nome_file
     soup = BeautifulSoup(element.get_attribute('innerHTML'), features='lxml')
     paragraphs = soup.find_all('div')
@@ -145,6 +149,6 @@ def PDF_parser(element):
         elif 'pc' not in stile:
             add_paragraph(document, p.text)
 
-    SimpleDocTemplate(str(nome_file), pagesize=A4, rightMargin=2*mm, leftMargin=20*mm, topMargin=18*mm, bottomMargin=2*mm).build(document)
+    SimpleDocTemplate((path + str(nome_file)), pagesize=A4, rightMargin=2*mm, leftMargin=20*mm, topMargin=18*mm, bottomMargin=2*mm).build(document)
     nome_file += 1
     
