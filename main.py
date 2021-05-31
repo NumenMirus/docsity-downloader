@@ -43,7 +43,7 @@ elif n == 2:
 #------------------------------------------------------------------------------
 
 #sets the driver to chrome
-driver = webdriver.Chrome("/home/numen/Desktop/progetti/docsity-downloader/chromedriver")
+driver = webdriver.Chrome("./chromedriver")
 
 #opens website from url
 driver.get(url)
@@ -117,9 +117,9 @@ print("\nTOTAL: %d\tblurred: %d\tcovered: %d\tfree: %d" %(len(divs), len(blurred
 #----------------------------ANALIZING RESULTS---------------------------------
 #------------------------------------------------------------------------------
 
-result = blurred_parser(blurred)
-download_files(result, path)
-covered_parser(covered, path)
+# result = blurred_parser(blurred)
+# download_files(result, path)
+# covered_parser(covered, path)
 free_parser(free, path)
 
 #------------------------------------------------------------------------------
