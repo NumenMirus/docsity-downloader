@@ -30,7 +30,7 @@ if n == 1:
     path = input("Inserisci il percorso: ")
     pagine = int(input("Quante pagine ha il documento?  "))
 
-    if 'en' in url:
+    if '/en/' in url:
             url = url.replace('/en/', '/it/')
 
 elif n == 2:

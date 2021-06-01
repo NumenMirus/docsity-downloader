@@ -122,15 +122,15 @@ def free_parser(free, path):
         PDF_parser(i, path)
 
 def add_title(doc, text):
-    doc.append(Spacer(1, 1.5))
-    doc.append(Paragraph(text, ParagraphStyle(name="titolo",fontName="Helvetica-Bold",fontSize=16,alignment=TA_CENTER)))
+    doc.append(Spacer(1, 15))
+    doc.append(Paragraph(text, ParagraphStyle(name="titolo",fontName="Times-Bold",fontSize=16,alignment=TA_CENTER)))
     doc.append(Spacer(1, 20))
 
     return doc
 
 def add_paragraph(doc, text):
-    doc.append(Paragraph(text, ParagraphStyle(name="corpo", fontName="Helvetica",fontSize=12,alignment=TA_JUSTIFY)))
-    doc.append(Spacer(1, 1.5))
+    doc.append(Paragraph(text, ParagraphStyle(name="corpo", fontName="Times",fontSize=12,alignment=TA_JUSTIFY)))
+    doc.append(Spacer(1, 2))
 
     return doc
 
@@ -138,6 +138,7 @@ def PDF_parser(element, path):
     global nome_file
     soup = BeautifulSoup(element.get_attribute('innerHTML'), features='lxml')
     paragraphs = soup.find_all('div')
+
 
     document = []
     for p in paragraphs:
@@ -149,6 +150,6 @@ def PDF_parser(element, path):
         elif 'pc' not in stile:
             add_paragraph(document, p.text)
 
-    SimpleDocTemplate((path + str(nome_file)), pagesize=A4, rightMargin=2*mm, leftMargin=20*mm, topMargin=18*mm, bottomMargin=2*mm).build(document)
+    SimpleDocTemplate((path + str(nome_file)+'.pdf'), pagesize=A4, rightMargin=2*mm, leftMargin=20*mm, topMargin=18*mm, bottomMargin=2*mm).build(document)
     nome_file += 1
     
