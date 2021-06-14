@@ -32,6 +32,11 @@ if n == 1:
 
     if '/en/' in url:
             url = url.replace('/en/', '/it/')
+    
+    if 'desktop' in path:
+        path = path.replace('desktop', 'Desktop')
+    if path[-1] != '/':
+        path = path + '/'
 
 elif n == 2:
     url = input("\nInserisci il link dell'immagine sfocata: ")
