@@ -1,6 +1,6 @@
-# NO MORE FUNCTIONING DUE TO SITE STRUCTURE CHANGES
+# !!NO MORE FUNCTIONING DUE TO SITE STRUCTURE CHANGES!!
 
-# docsity-downloader
+## docsity-downloader
 
 Tool to download for free files offered by docsity.
 Built in Python 3.8.5
