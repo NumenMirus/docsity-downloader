@@ -1,3 +1,5 @@
+#NO MORE FUNCTIONING DUE TO SITE STRUCTURE CHANGES
+
 # docsity-downloader
 
 Tool to download for free files offered by docsity.
